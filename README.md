@@ -25,20 +25,15 @@ A Python-based smart attendance system that uses QR code scanning via webcam to 
 
 ---
 
-## 🚀 How to Run
-
-1. **Install dependencies**
-
-   Run the following in your terminal:
-
-
-2. **Run the QR scanner**
-
-
-3. To generate a summary report:
-
-
----
+🚀 How to Run
+Step 1: Generate QR Codes
+Run this script to generate unique QR codes for each individual:
+python qr_generator.py
+Step 2: Start Attendance Scanner
+Use the webcam to scan QR codes and record attendance:
+python scanner.py
+Step 3: Check Attendance Logs
+Attendance data will be saved in Attendance/ folder with the current date.
 
 ## 📁 Project Structure
 
