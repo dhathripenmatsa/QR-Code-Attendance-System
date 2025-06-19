@@ -35,12 +35,21 @@ A Python-based smart attendance system that uses QR code scanning via webcam to 
 2. **Run the QR scanner**
 
 
-3. **(Optional)** To generate a summary report:
+3. To generate a summary report:
 
 
 ---
 
 ## 📁 Project Structure
+
+📂 QR_Attendance_System/  
+├── scanner.py               → Main QR code scanner  
+├── summary_report.py        → Script to generate daily summary  
+├── attendance.csv           → Logs scanned names & timestamps  
+├── summary_report.txt       → Plain text report of daily attendance  
+├── summary_report.csv       → CSV version of the report  
+├── qrcodes/                 → Folder containing student QR codes  
+└── README.md                → Project documentation  
 
 
 ---
