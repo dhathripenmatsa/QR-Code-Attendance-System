@@ -1,4 +1,7 @@
 # QR Code-Based Smart Attendance System
+## 🚀 Demo
+
+👉 [Click here to launch the Streamlit demo](https://qr-code-based-smart-attendance-system-jm2xm7jwr3njlpyc8cjzjp.streamlit.app/)
 
 A Python-based smart attendance system that uses QR code scanning via webcam to automate attendance tracking. This project is ideal for schools, colleges, and organizations looking for a simple and efficient attendance solution.
 
