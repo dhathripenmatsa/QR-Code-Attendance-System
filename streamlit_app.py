@@ -1,4 +1,5 @@
 # streamlit_app.py
+import cv2  
 import streamlit as st
 import qrcode
 import io
@@ -55,62 +56,55 @@ if submitted:
 # ---------------------------------------------------------------------
 # Attendance scanner section
 # ---------------------------------------------------------------------
+# ─── Attendance Scanner (OpenCV QRCodeDetector) ────────────────────────────
 st.header("🎥 Scan QR Code for Attendance")
 
-img = st.camera_input("Show your QR Code to the webcam and click **Capture**")
+img_file = st.camera_input("Show your QR Code to the webcam and click **Capture**")
 
-if img:
-    img = Image.open(img)
-    results = decode(img)
+if img_file:
+    img = Image.open(img_file)
+    img_cv = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
 
-    if results:
-        qr_data = results[0].data.decode("utf-8")
+    detector = cv2.QRCodeDetector()
+    qr_data, _, _ = detector.detectAndDecode(img_cv)
+
+    if qr_data:
         try:
-            scanned_id, scanned_name = qr_data.split(",", 1)
+            scanned_id, scanned_name = [x.strip() for x in qr_data.split(",", 1)]
         except ValueError:
             st.error("Invalid QR format. Expected 'StudentID,StudentName'.")
             st.stop()
 
-        # Current date & time
-        now       = datetime.now()
-        date_str  = now.strftime("%Y-%m-%d")
-        time_str  = now.strftime("%H:%M:%S")
+        now      = datetime.now()
+        date_str = now.strftime("%Y-%m-%d")
+        time_str = now.strftime("%H:%M:%S")
 
-        # Load or initialise CSV
+        # Load or create CSV
         if os.path.exists(ATTENDANCE_FILE):
             df = pd.read_csv(ATTENDANCE_FILE)
-            # If header mismatch, force‑fix but warn user
             if list(df.columns) != COLS:
                 df.columns = COLS[: len(df.columns)]
         else:
             df = pd.DataFrame(columns=COLS)
 
-        # Duplicate check (same student, same day)
         already = ((df["Student_ID"] == scanned_id) & (df["Date"] == date_str)).any()
 
         if already:
-            st.warning(f"⚠️  {scanned_name} ({scanned_id}) already marked today.")
+            st.warning(f"⚠️ {scanned_name} ({scanned_id}) already marked today.")
         else:
-            # Build new row
             new_row = {
                 "Student_ID":   scanned_id,
                 "Student_Name": scanned_name,
                 "Date":         date_str,
                 "Time":         time_str,
             }
-
-            # Append to CSV
             df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
             df.to_csv(ATTENDANCE_FILE, index=False)
 
-            # Append to TXT log
             with open(TXT_LOG, "a", encoding="utf-8") as f:
                 f.write(f"{date_str} {time_str}  |  {scanned_name} (ID: {scanned_id})\n")
 
-            # Success feedback
             st.balloons()
             st.success(f"✅ Attendance marked for {scanned_name} at {time_str}")
     else:
         st.error("❌ Could not detect a QR code in the captured image.")
-
-
