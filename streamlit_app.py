@@ -6,6 +6,7 @@ import io
 from PIL import Image
 from datetime import datetime
 import pandas as pd
+import numpy as np
 import os
 
 # File paths
