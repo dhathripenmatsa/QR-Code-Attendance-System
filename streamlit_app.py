@@ -4,7 +4,6 @@ import streamlit as st
 import qrcode
 import io
 from PIL import Image
-from pyzbar.pyzbar import decode
 from datetime import datetime
 import pandas as pd
 import os
