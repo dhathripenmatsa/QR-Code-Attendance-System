@@ -34,7 +34,7 @@ with st.form("qr_form", clear_on_submit=True):
 
 if submitted:
     if student_name and student_id:
-        data = f"{student_id},{student_name}"
+        data = f"{student_name},{student_id}"   # Name first, then ID
         qr_img = qrcode.make(data)
 
         # Ensure 'qrcodes' folder exists
@@ -70,9 +70,9 @@ if img_file:
 
     if qr_data:
         try:
-            scanned_id, scanned_name = [x.strip() for x in qr_data.split(",", 1)]
+            scanned_name, scanned_id = [x.strip() for x in qr_data.split(",", 1)]
         except ValueError:
-            st.error("Invalid QR format. Expected 'StudentID,StudentName'.")
+            st.error("Invalid QR format. Expected 'StudentName,StudentID'.")
             st.stop()
 
         now      = datetime.now()
